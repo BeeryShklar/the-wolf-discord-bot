@@ -14,7 +14,6 @@ async function initHandlers() {
 		const normalizedPath = path.join(__dirname, folderName)
 
 		const items = await fs.readdir(normalizedPath)
-		console.log(items)
 		items.forEach(item => {
 			const handler = require(`./${folderName}/${item}`)
 			const eventName = path.parse(item).name
