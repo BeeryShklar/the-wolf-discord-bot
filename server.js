@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 
 app.use('/status', status)
 
-// bot.login(process.env.DISCORD_BOT_TOKEN)
+bot.login(process.env.DISCORD_BOT_TOKEN)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, err => {
