@@ -18,8 +18,14 @@ const cb = async (args, cmd, msg) => {
 	else renderAllCommands(msg, content, prefix, guildSettings)
 }
 
+const help = () => ({
+	command: 'help (command)',
+	description: 'Show this menu',
+})
+
 module.exports = {
 	cb,
+	help,
 }
 
 async function renderAllCommands(msg, content, prefix, guildSettings) {

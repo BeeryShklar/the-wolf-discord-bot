@@ -15,11 +15,16 @@ const cb = async (args, cmd, msg) => {
 	const field = args[0]
 	const action = args[1]
 	const msgColor = await guildSettings.get('msg-color')
-	// if (
-	// 	!msg.member.permissions.has('ADMINISTRATOR') ||
-	// 	!msg.member.roles.has(guildSettings.get('manager-role'))
-	// )
-	// 	continue
+	if (
+		!msg.member.permissions.has('ADMINISTRATOR') &&
+		!msg.member.roles.cache.has(await guildSettings.get('manager-role'))
+	) {
+		return msg.channel.send(
+			new Discord.MessageEmbed().setTitle(
+				"You don't have permissions to use this commands"
+			)
+		)
+	}
 
 	switch (action) {
 		case 'set':

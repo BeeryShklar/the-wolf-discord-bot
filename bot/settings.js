@@ -7,11 +7,13 @@ const defaultSettings = new Map(
 	Object.entries({
 		prefix: '!',
 		'msg-color': '#FEB120',
+		'manager-role': undefined,
 	})
 )
 const settingsDescription = {
 	prefix: "The prefix of all the bot's commands",
 	'msg-color': "The color of the bot's messages",
+	'manager-role': "People that have this role can use the bot's admin commands",
 }
 
 class GuildSettings {
