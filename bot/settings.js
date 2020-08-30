@@ -1,8 +1,12 @@
 const Discord = require('discord.js')
-const db = new Map()
+const NedbMap = require('./helpers/nedb-map')
+const db = new NedbMap({ filename: './settings.db' })
+// const db = new Map()
+
 const defaultSettings = new Map(
 	Object.entries({
 		prefix: '!',
+		'msg-color': '#FEB120',
 	})
 )
 
@@ -11,38 +15,45 @@ class GuildSettings {
 	 * @param {Discord.Guild} guild
 	 */
 	constructor(guild) {
-		this.guild = guild
+		this.guildId = guild.id
 	}
 
 	/**
 	 * @return {Map}
 	 */
-	get map() {
-		const exists = db.has(this.guild)
-		if (!exists) db.set(this.guild, new Map(defaultSettings))
-		return db.get(this.guild)
+	async getGuildSettings() {
+		const exists = await db.has(this.guildId)
+		if (!exists) await db.set(this.guildId, [])
+		return new Map(await db.get(this.guildId))
 	}
 	/**
 	 * @param {String} field
 	 */
-	get(field) {
-		return this.map.get(field)
+	async get(field) {
+		const map = await this.getGuildSettings()
+		return map.get(field) || defaultSettings.get(field)
 	}
 	/**
 	 * @param {String} field
 	 * @param {any} value
 	 */
-	set(field, value) {
-		return this.map.set(field, value)
+	async set(field, value) {
+		const map = await this.getGuildSettings()
+		map.set(field, value)
+		const setValue = await db.set(this.guildId, [...map])
+		return map
 	}
 	/**
 	 * @param {String} field
 	 */
-	reset(field) {
-		this.map.set(field, defaultSettings.get(field))
+	async reset(field) {
+		if (!defaultSettings.has(field)) return new Error('No such field')
+		const map = await this.getGuildSettings()
+		map.set(field, defaultSettings.get(field))
 	}
 }
 
 module.exports = {
 	GuildSettings,
+	defaultSettings,
 }

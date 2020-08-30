@@ -7,11 +7,11 @@ const getFolderContent = require('../helpers/getFolderContent')
 /**
  * @param {Discord.Message} msg
  */
-module.exports = msg => {
+module.exports = async msg => {
 	if (msg.author.bot) return new Error('Author is a bot')
 	const guildSettings = new GuildSettings(msg.guild)
 
-	const prefix = guildSettings.get('prefix')
+	const prefix = await guildSettings.get('prefix')
 	if (msg.content.startsWith(prefix)) {
 		const split = msg.content.split(/\s/)
 		const cmd = split[0].replace(prefix, '')
