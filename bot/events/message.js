@@ -34,7 +34,7 @@ async function runMatchingCommands(cmd, args, msg) {
 	content.forEach(file => {
 		if (file.ext !== '.js') return
 		if (file.name === cmd) {
-			file.handler(args, cmd, msg)
+			file.handler.cb(args, cmd, msg)
 		}
 	})
 }

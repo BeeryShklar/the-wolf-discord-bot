@@ -1,17 +1,25 @@
 const Discord = require('discord.js')
-const { GuildSettings, defaultSettings } = require('../../settings')
-const settings = require('../../settings')
+const {
+	GuildSettings,
+	defaultSettings,
+	settingsDescription,
+} = require('../../settings')
 
 /**
  * @param {Array[String]} args
  * @param {String} cmd
  * @param {Discord.Message} msg
  */
-module.exports = async (args, cmd, msg) => {
+const cb = async (args, cmd, msg) => {
 	const guildSettings = new GuildSettings(msg.guild)
 	const field = args[0]
 	const action = args[1]
 	const msgColor = await guildSettings.get('msg-color')
+	// if (
+	// 	!msg.member.permissions.has('ADMINISTRATOR') ||
+	// 	!msg.member.roles.has(guildSettings.get('manager-role'))
+	// )
+	// 	continue
 
 	switch (action) {
 		case 'set':
@@ -46,5 +54,34 @@ module.exports = async (args, cmd, msg) => {
 					.addField('Value', value, true)
 			)
 			break
+		case 'reset':
+			guildSettings.delete(field)
+			msg.channel.send(
+				new Discord.MessageEmbed()
+					.setTitle(`Reset \`${field}\``)
+					.setColor(msgColor)
+			)
+			break
 	}
+}
+
+const settingsDescriptionText = Object.keys(settingsDescription)
+	.map(key => {
+		return `\`${key}\` - ${settingsDescription[key]}`
+	})
+	.join('\n')
+const help = (prefix, msg) => {
+	return {
+		command: 'tw [variable] [get|set|reset] (new value)',
+		description: `Changes the bot's settings.
+	Run \`${prefix}help tw\` for more information.`,
+		long: `**Settings**:
+		${settingsDescriptionText}
+	`,
+	}
+}
+
+module.exports = {
+	cb,
+	help,
 }

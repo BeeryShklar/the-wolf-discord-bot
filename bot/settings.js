@@ -9,6 +9,10 @@ const defaultSettings = new Map(
 		'msg-color': '#FEB120',
 	})
 )
+const settingsDescription = {
+	prefix: "The prefix of all the bot's commands",
+	'msg-color': "The color of the bot's messages",
+}
 
 class GuildSettings {
 	/**
@@ -38,22 +42,25 @@ class GuildSettings {
 	 * @param {any} value
 	 */
 	async set(field, value) {
+		if (value === defaultSettings.get(field)) this.delete(field)
 		const map = await this.getGuildSettings()
 		map.set(field, value)
-		const setValue = await db.set(this.guildId, [...map])
+		db.set(this.guildId, [...map])
 		return map
 	}
 	/**
 	 * @param {String} field
 	 */
-	async reset(field) {
+	async delete(field) {
 		if (!defaultSettings.has(field)) return new Error('No such field')
 		const map = await this.getGuildSettings()
-		map.set(field, defaultSettings.get(field))
+		map.delete(field)
+		db.set(this.guildId, [...map])
 	}
 }
 
 module.exports = {
 	GuildSettings,
 	defaultSettings,
+	settingsDescription,
 }
