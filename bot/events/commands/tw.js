@@ -4,6 +4,7 @@ const {
 	defaultSettings,
 	settingsDescription,
 } = require('../../settings')
+const { parseRoleMention } = require('../../helpers/parseMentions')
 
 /**
  * @param {Array[String]} args
@@ -15,9 +16,15 @@ const cb = async (args, cmd, msg) => {
 	const field = args[0]
 	const action = args[1] || ''
 	const msgColor = await guildSettings.get('msg-color')
+
+	const managerRoleId = parseRoleMention(
+		await guildSettings.get('manager-role')
+	)
+
+	console.log(msg.member.permissions.has('ADMINISTRATOR'))
 	if (
 		!msg.member.permissions.has('ADMINISTRATOR') &&
-		!msg.member.roles.cache.has(await guildSettings.get('manager-role'))
+		!msg.member.roles.cache.has(managerRoleId)
 	) {
 		return msg.channel.send(
 			new Discord.MessageEmbed().setTitle(
@@ -56,7 +63,7 @@ const cb = async (args, cmd, msg) => {
 				new Discord.MessageEmbed()
 					.setColor(msgColor)
 					.addField('Name', field, true)
-					.addField('Value', value, true)
+					.addField('Value', value || '_Not set_', true)
 			)
 			break
 		case 'reset':

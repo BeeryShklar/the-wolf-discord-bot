@@ -3,6 +3,7 @@ const fs = require('fs').promises
 const path = require('path')
 const { GuildSettings } = require('../settings')
 const getFolderContent = require('../helpers/getFolderContent')
+const { parseRoleMention } = require('../helpers/parseMentions')
 
 /**
  * @param {Discord.Message} msg
@@ -11,12 +12,20 @@ module.exports = async msg => {
 	if (msg.author.bot) return new Error('Author is a bot')
 	const guildSettings = new GuildSettings(msg.guild)
 
-	const replyPrefixes = await guildSettings.get('reply-prefixes')
-	Object.keys(replyPrefixes).forEach(replyPrefix => {
-		if (msg.content.toLowerCase().startsWith(replyPrefix))
-			msg.channel.send(replyPrefixes[replyPrefix])
-	})
+	// Reply prefixes
+	const replyPrefixesRoleId = parseRoleMention(
+		await guildSettings.get('reply-prefixes-role')
+	)
 
+	if (msg.member.roles.cache.has(replyPrefixesRoleId) || !replyPrefixesRoleId) {
+		const replyPrefixes = await guildSettings.get('reply-prefixes')
+		Object.keys(replyPrefixes).forEach(replyPrefix => {
+			if (msg.content.toLowerCase().startsWith(replyPrefix))
+				msg.channel.send(replyPrefixes[replyPrefix])
+		})
+	}
+
+	// Commands
 	const prefix = await guildSettings.get('prefix')
 	if (msg.content.startsWith(prefix)) {
 		const split = msg.content.split(/\s/)

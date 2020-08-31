@@ -12,6 +12,7 @@ const defaultSettings = new Map(
 			היי: 'ביי',
 			hi: 'Bye',
 		},
+		'reply-prefixes-role': undefined,
 	})
 )
 const settingsDescription = {
@@ -20,6 +21,7 @@ const settingsDescription = {
 	'manager-role': "People that have this role can use the bot's admin commands",
 	'reply-prefixes':
 		'An object where the keys are the the prefix and the values are the reply message',
+	'reply-prefixes-role': 'The role which the bot is going to reply to',
 }
 
 class GuildSettings {

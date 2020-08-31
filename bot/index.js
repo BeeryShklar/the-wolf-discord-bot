@@ -19,7 +19,11 @@ async function initHandlers() {
 		if (file.ext !== '.js') return
 		const eventName = file.name
 		client.on(eventName, args => {
-			file.handler(args, client)
+			try {
+				file.handler(args, client)
+			} catch (err) {
+				console.error(error)
+			}
 		})
 	})
 }
