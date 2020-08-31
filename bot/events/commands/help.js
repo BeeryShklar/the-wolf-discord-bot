@@ -47,7 +47,7 @@ async function renderAllCommands(msg, content, prefix, guildSettings) {
 			const description = help.description || 'Description not found'
 
 			return `
-			\`${prefix}${command}\`
+			**_\`${prefix}${command}\`_**
 			${description}
 			`
 		})
