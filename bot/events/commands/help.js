@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const { GuildSettings } = require('../../settings')
 const getFolderContent = require('../../helpers/getFolderContent')
+const { protectAdmin } = require('../../helpers/protect')
 
 /**
  * @param {Array[String]} args
@@ -8,6 +9,14 @@ const getFolderContent = require('../../helpers/getFolderContent')
  * @param {Discord.Message} msg
  */
 const cb = async (args, cmd, msg) => {
+	if (!(await protectAdmin(msg.member, msg.guild.id))) {
+		return msg.channel.send(
+			new Discord.MessageEmbed().setTitle(
+				"You don't have permissions to use this commands"
+			)
+		)
+	}
+
 	const guildSettings = new GuildSettings(msg.guild.id)
 	const prefix = await guildSettings.get('prefix')
 	const content = await getFolderContent(__dirname)

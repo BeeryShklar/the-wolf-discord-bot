@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const { GuildSettings } = require('../../settings')
+const { protectAdmin } = require('../../helpers/protect')
 
 /**
  * @param {Array[String]} args
@@ -7,6 +8,14 @@ const { GuildSettings } = require('../../settings')
  * @param {Discord.Message} msg
  */
 const cb = async (args, cmd, msg) => {
+	if (!(await protectAdmin(msg.member, msg.guild.id))) {
+		return msg.channel.send(
+			new Discord.MessageEmbed().setTitle(
+				"You don't have permissions to use this commands"
+			)
+		)
+	}
+
 	const guildSettings = new GuildSettings(msg.guild.id)
 	const prefix = await guildSettings.get('prefix')
 	const msgColor = await guildSettings.get('msg-color')

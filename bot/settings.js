@@ -7,7 +7,7 @@ const defaultSettings = new Map(
 	Object.entries({
 		prefix: '!',
 		'msg-color': '#16A585',
-		'manager-role': undefined,
+		'admin-role': undefined,
 		'reply-new': {
 			help:
 				'If you want help with bot commands type `!help` (prefix might vary)',
@@ -22,7 +22,7 @@ const defaultSettings = new Map(
 const settingsDescription = {
 	prefix: "The prefix of all the bot's commands",
 	'msg-color': "The color of the bot's messages",
-	'manager-role': "People that have this role can use the bot's admin commands",
+	'admin-role': "People that have this role can use the bot's admin commands",
 	'reply-new':
 		'Sends a new message when a message starts with `x`.\n**Value:** A js object where the keys are the prefixes and the values are the messages',
 	'reply-modify':

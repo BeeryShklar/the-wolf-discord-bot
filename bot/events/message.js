@@ -4,6 +4,7 @@ const path = require('path')
 const { GuildSettings } = require('../settings')
 const getFolderContent = require('../helpers/getFolderContent')
 const { parseRoleMention } = require('../helpers/parseMentions')
+const { protectReply } = require('../helpers/protect')
 
 /**
  * @param {Discord.Message} msg
@@ -12,8 +13,7 @@ module.exports = async msg => {
 	if (msg.author.bot) return new Error('Author is a bot')
 	const guildSettings = new GuildSettings(msg.guild.id)
 
-	const replyRoleId = parseRoleMention(await guildSettings.get('reply-role'))
-	if (replyRoleId && msg.member.roles.cache.has(replyRoleId)) {
+	if (protectReply(msg.member, msg.guild.id)) {
 		matchReplyNewPrefixes(msg, guildSettings)
 		matchReplyModifyPrefixes(msg, guildSettings)
 	}

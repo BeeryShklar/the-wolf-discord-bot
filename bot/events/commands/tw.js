@@ -5,6 +5,8 @@ const {
 	settingsDescription,
 } = require('../../settings')
 const { parseRoleMention } = require('../../helpers/parseMentions')
+const { protectAdmin } = require('../../helpers/protect')
+const message = require('../message')
 
 /**
  * @param {Array[String]} args
@@ -12,25 +14,18 @@ const { parseRoleMention } = require('../../helpers/parseMentions')
  * @param {Discord.Message} msg
  */
 const cb = async (args, cmd, msg) => {
-	const guildSettings = new GuildSettings(msg.guild.id)
-	const field = args[0]
-	const action = args[1] || ''
-	const msgColor = await guildSettings.get('msg-color')
-
-	const managerRoleId = parseRoleMention(
-		await guildSettings.get('manager-role')
-	)
-
-	if (
-		!msg.member.permissions.has('ADMINISTRATOR') &&
-		!msg.member.roles.cache.has(managerRoleId)
-	) {
+	if (!(await protectAdmin(msg.member, msg.guild.id))) {
 		return msg.channel.send(
 			new Discord.MessageEmbed().setTitle(
 				"You don't have permissions to use this commands"
 			)
 		)
 	}
+
+	const guildSettings = new GuildSettings(msg.guild.id)
+	const field = args[0]
+	const action = args[1] || ''
+	const msgColor = await guildSettings.get('msg-color')
 
 	switch (action) {
 		case 'set':
@@ -56,21 +51,21 @@ const cb = async (args, cmd, msg) => {
 					)
 			)
 			break
-		case ('get', ''):
-			const value = await guildSettings.get(field)
-			msg.channel.send(
-				new Discord.MessageEmbed()
-					.setColor(msgColor)
-					.addField('Name', field, true)
-					.addField('Value', value || '_Not set_', true)
-			)
-			break
 		case 'reset':
 			guildSettings.delete(field)
 			msg.channel.send(
 				new Discord.MessageEmbed()
 					.setTitle(`Reset \`${field}\``)
 					.setColor(msgColor)
+			)
+			break
+		default:
+			const value = await guildSettings.get(field)
+			msg.channel.send(
+				new Discord.MessageEmbed()
+					.setColor(msgColor)
+					.addField('Name', field, true)
+					.addField('Value', value || '_Not set_', true)
 			)
 			break
 	}
