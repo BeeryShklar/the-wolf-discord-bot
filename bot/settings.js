@@ -17,11 +17,13 @@ const defaultSettings = new Map(
 			היי: 'ביי',
 		},
 		'reply-role': undefined,
+		'warning-color': '#DD4D66',
 	})
 )
 const settingsDescription = {
 	prefix: "The prefix of all the bot's commands",
 	'msg-color': "The color of the bot's messages",
+	'warning-color': "The color of the bot's alert messages",
 	'admin-role': "People that have this role can use the bot's admin commands",
 	'reply-new':
 		'Sends a new message when a message starts with `x`.\n**Value:** A js object where the keys are the prefixes and the values are the messages',
