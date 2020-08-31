@@ -17,7 +17,7 @@ module.exports = async msg => {
 		await guildSettings.get('reply-prefixes-role')
 	)
 
-	if (msg.member.roles.cache.has(replyPrefixesRoleId) || !replyPrefixesRoleId) {
+	if (replyPrefixesRoleId && msg.member.roles.cache.has(replyPrefixesRoleId)) {
 		const replyPrefixes = await guildSettings.get('reply-prefixes')
 		Object.keys(replyPrefixes).forEach(replyPrefix => {
 			if (msg.content.toLowerCase().startsWith(replyPrefix))
