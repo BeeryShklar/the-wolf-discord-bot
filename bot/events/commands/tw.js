@@ -13,7 +13,7 @@ const {
 const cb = async (args, cmd, msg) => {
 	const guildSettings = new GuildSettings(msg.guild)
 	const field = args[0]
-	const action = args[1]
+	const action = args[1] || ''
 	const msgColor = await guildSettings.get('msg-color')
 	if (
 		!msg.member.permissions.has('ADMINISTRATOR') &&
@@ -50,7 +50,7 @@ const cb = async (args, cmd, msg) => {
 					)
 			)
 			break
-		case 'get':
+		case ('get', ''):
 			const value = await guildSettings.get(field)
 			msg.channel.send(
 				new Discord.MessageEmbed()

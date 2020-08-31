@@ -20,7 +20,7 @@ const cb = async (args, cmd, msg) => {
 
 const help = () => ({
 	command: 'help (command)',
-	description: 'Show this menu',
+	description: 'Show this menu.',
 })
 
 module.exports = {
@@ -74,7 +74,7 @@ async function renderSpecificCommand(
 		new Discord.MessageEmbed()
 			.setColor(await guildSettings.get('msg-color'))
 			.setAuthor('The Wolf Bot Help').setDescription(`
-			**${file.name}**
+			**Syntax:**
 			\`${help.command || ''}\`
 
 			${longDescription}`)
