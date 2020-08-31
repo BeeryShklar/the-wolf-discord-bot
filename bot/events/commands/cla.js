@@ -7,17 +7,18 @@ const { GuildSettings } = require('../../settings')
  * @param {Discord.Message} msg
  */
 const cb = async (args, cmd, msg) => {
-	const guildSettings = new GuildSettings(msg.guild)
+	const guildSettings = new GuildSettings(msg.guild.id)
 	const prefix = await guildSettings.get('prefix')
 	const msgColor = await guildSettings.get('msg-color')
+
 	const allMessages = await await msg.channel.messages.fetch()
-	if (allMessages.length > 10 && !args[0] === 'f')
+	if (allMessages.length > 100 && args[0] !== 'f')
 		msg.channel.send(
 			new Discord.MessageEmbed()
 				.setColor(msgColor)
 				.setTitle('Too many messages')
 				.setDescription(
-					`Type \`${prefix}cleara\` f to force deleting all the messages. (This can cause performance issues)`
+					`Type \`${prefix}cleara\` f to force deleting all the messages.`
 				)
 		)
 

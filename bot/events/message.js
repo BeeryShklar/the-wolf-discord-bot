@@ -10,7 +10,7 @@ const { parseRoleMention } = require('../helpers/parseMentions')
  */
 module.exports = async msg => {
 	if (msg.author.bot) return new Error('Author is a bot')
-	const guildSettings = new GuildSettings(msg.guild)
+	const guildSettings = new GuildSettings(msg.guild.id)
 
 	const replyRoleId = parseRoleMention(await guildSettings.get('reply-role'))
 	if (replyRoleId && msg.member.roles.cache.has(replyRoleId)) {

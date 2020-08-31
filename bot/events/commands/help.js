@@ -8,7 +8,7 @@ const getFolderContent = require('../../helpers/getFolderContent')
  * @param {Discord.Message} msg
  */
 const cb = async (args, cmd, msg) => {
-	const guildSettings = new GuildSettings(msg.channel)
+	const guildSettings = new GuildSettings(msg.guild.id)
 	const prefix = await guildSettings.get('prefix')
 	const content = await getFolderContent(__dirname)
 

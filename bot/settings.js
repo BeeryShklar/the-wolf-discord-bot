@@ -35,8 +35,8 @@ class GuildSettings {
 	/**
 	 * @param {Discord.Guild} guild
 	 */
-	constructor(guild) {
-		this.guildId = guild.id
+	constructor(guildId) {
+		this.guildId = guildId
 	}
 
 	/**

@@ -12,7 +12,7 @@ const { parseRoleMention } = require('../../helpers/parseMentions')
  * @param {Discord.Message} msg
  */
 const cb = async (args, cmd, msg) => {
-	const guildSettings = new GuildSettings(msg.guild)
+	const guildSettings = new GuildSettings(msg.guild.id)
 	const field = args[0]
 	const action = args[1] || ''
 	const msgColor = await guildSettings.get('msg-color')
