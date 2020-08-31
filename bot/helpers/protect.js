@@ -22,7 +22,7 @@ const protectAdmin = async (member, guildId) => {
  */
 const protectReply = async (member, guildId) => {
 	const guildSettings = new GuildSettings(guildId)
-	const adminRoleId = parseRoleMention(await guildSettings.get('admin-role'))
+	const adminRoleId = parseRoleMention(await guildSettings.get('reply-role'))
 
 	return member.roles.cache.has(adminRoleId)
 }

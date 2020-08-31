@@ -13,7 +13,7 @@ module.exports = async msg => {
 	if (msg.author.bot) return new Error('Author is a bot')
 	const guildSettings = new GuildSettings(msg.guild.id)
 
-	if (protectReply(msg.member, msg.guild.id)) {
+	if (await protectReply(msg.member, msg.guild.id)) {
 		matchReplyNewPrefixes(msg, guildSettings)
 		matchReplyModifyPrefixes(msg, guildSettings)
 	}
