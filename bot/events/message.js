@@ -11,6 +11,12 @@ module.exports = async msg => {
 	if (msg.author.bot) return new Error('Author is a bot')
 	const guildSettings = new GuildSettings(msg.guild)
 
+	const replyPrefixes = await guildSettings.get('reply-prefixes')
+	Object.keys(replyPrefixes).forEach(replyPrefix => {
+		if (msg.content.toLowerCase().startsWith(replyPrefix))
+			msg.channel.send(replyPrefixes[replyPrefix])
+	})
+
 	const prefix = await guildSettings.get('prefix')
 	if (msg.content.startsWith(prefix)) {
 		const split = msg.content.split(/\s/)

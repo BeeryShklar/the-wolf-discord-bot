@@ -31,7 +31,7 @@ module.exports = {
 async function renderAllCommands(msg, content, prefix, guildSettings) {
 	const commandsList = content
 		.filter(file => file.ext === '.js')
-		.sort()
+		.sort((a, b) => (a.name > b.name ? 1 : -1))
 		.map(file => {
 			const help = file.handler.help ? file.handler.help(prefix, msg) : {}
 			const command = help.command || file.name
@@ -69,7 +69,9 @@ async function renderSpecificCommand(
 				.setDescription(`Couldn't find a help page for that commands`)
 		)
 	const longDescription =
-		help.long || `${help.description || 'Description not found'}`
+		help.long ||
+		`**Description**:
+		${help.description || 'Description not found'}`
 	msg.channel.send(
 		new Discord.MessageEmbed()
 			.setColor(await guildSettings.get('msg-color'))

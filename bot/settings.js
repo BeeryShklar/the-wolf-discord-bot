@@ -6,14 +6,20 @@ const db = new NedbMap({ filename: './settings.db' })
 const defaultSettings = new Map(
 	Object.entries({
 		prefix: '!',
-		'msg-color': '#FEB120',
+		'msg-color': '#16A585',
 		'manager-role': undefined,
+		'reply-prefixes': {
+			היי: 'ביי',
+			hi: 'Bye',
+		},
 	})
 )
 const settingsDescription = {
 	prefix: "The prefix of all the bot's commands",
 	'msg-color': "The color of the bot's messages",
 	'manager-role': "People that have this role can use the bot's admin commands",
+	'reply-prefixes':
+		'An object where the keys are the the prefix and the values are the reply message',
 }
 
 class GuildSettings {

@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const settings = require('../../settings')
 
 /**
  * @param {Array[String]} args
