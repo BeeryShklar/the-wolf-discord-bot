@@ -22,7 +22,7 @@ async function initHandlers() {
 			try {
 				file.handler(args, client)
 			} catch (err) {
-				console.error(error)
+				console.error(err)
 			}
 		})
 	})

@@ -21,7 +21,6 @@ const cb = async (args, cmd, msg) => {
 		await guildSettings.get('manager-role')
 	)
 
-	console.log(msg.member.permissions.has('ADMINISTRATOR'))
 	if (
 		!msg.member.permissions.has('ADMINISTRATOR') &&
 		!msg.member.roles.cache.has(managerRoleId)

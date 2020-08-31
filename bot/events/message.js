@@ -12,17 +12,10 @@ module.exports = async msg => {
 	if (msg.author.bot) return new Error('Author is a bot')
 	const guildSettings = new GuildSettings(msg.guild)
 
-	// Reply prefixes
-	const replyPrefixesRoleId = parseRoleMention(
-		await guildSettings.get('reply-prefixes-role')
-	)
-
-	if (replyPrefixesRoleId && msg.member.roles.cache.has(replyPrefixesRoleId)) {
-		const replyPrefixes = await guildSettings.get('reply-prefixes')
-		Object.keys(replyPrefixes).forEach(replyPrefix => {
-			if (msg.content.toLowerCase().startsWith(replyPrefix))
-				msg.channel.send(replyPrefixes[replyPrefix])
-		})
+	const replyRoleId = parseRoleMention(await guildSettings.get('reply-role'))
+	if (replyRoleId && msg.member.roles.cache.has(replyRoleId)) {
+		matchReplyNewPrefixes(msg, guildSettings)
+		matchReplyModifyPrefixes(msg, guildSettings)
 	}
 
 	// Commands
@@ -51,5 +44,24 @@ async function runMatchingCommands(cmd, args, msg) {
 		if (file.name === cmd) {
 			file.handler.cb(args, cmd, msg)
 		}
+	})
+}
+
+// Match reply prefixes
+async function matchReplyNewPrefixes(msg, guildSettings) {
+	const replyNewPrefixes = await guildSettings.get('reply-new')
+	Object.keys(replyNewPrefixes).forEach(replyPrefix => {
+		if (msg.content.toLowerCase().startsWith(replyPrefix))
+			msg.channel.send(replyNewPrefixes[replyPrefix])
+	})
+}
+
+async function matchReplyModifyPrefixes(msg, guildSettings) {
+	const replyModifyPrefixes = await guildSettings.get('reply-modify')
+	Object.keys(replyModifyPrefixes).forEach(replyPrefix => {
+		if (msg.content.toLowerCase().startsWith(replyPrefix))
+			msg.channel.send(
+				msg.content.replace(replyPrefix, replyModifyPrefixes[replyPrefix])
+			)
 	})
 }
