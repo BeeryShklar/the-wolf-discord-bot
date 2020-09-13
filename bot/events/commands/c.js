@@ -7,7 +7,7 @@ const { protectAdmin } = require('../../helpers/protect')
  * @param {String} cmd
  * @param {Discord.Message} msg
  */
-const cb = async (args, cmd, msg) => {
+const cb = async (args, _, msg) => {
 	if (!(await protectAdmin(msg.member, msg.guild.id))) {
 		return msg.channel.send(
 			new Discord.MessageEmbed().setTitle(
@@ -17,16 +17,23 @@ const cb = async (args, cmd, msg) => {
 	}
 
 	const guildSettings = new GuildSettings(msg.guild.id)
-	const prefix = await guildSettings.get('prefix')
 	const msgColor = await guildSettings.get('msg-color')
 	const warningColor = await guildSettings.get('warning-color')
 
 	const amountToDelete = parseInt(args[0])
-	const messagesToDelete = await await msg.channel.messages.fetch({
+	const messagesToDelete = await msg.channel.messages.fetch({
 		limit: amountToDelete < 100 ? amountToDelete + 1 : 100,
 	})
 
-	const messagesDeleted = await msg.channel.bulkDelete(messagesToDelete)
+	try {
+		const messagesDeleted = await msg.channel.bulkDelete(messagesToDelete)
+	} catch (err) {
+		msg.channel.send(
+			new Discord.MessageEmbed()
+				.setColor(warningColor)
+				.setTitle(`An error occurred while trying to delete this messages :(`)
+		)
+	}
 	if (amountToDelete > 100) {
 		const warningMessage = await msg.channel.send(
 			new Discord.MessageEmbed()
