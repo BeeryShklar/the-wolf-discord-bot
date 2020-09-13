@@ -19,6 +19,7 @@ const cb = async (args, cmd, msg) => {
 	const guildSettings = new GuildSettings(msg.guild.id)
 	const prefix = await guildSettings.get('prefix')
 	const msgColor = await guildSettings.get('msg-color')
+	const warningColor = await guildSettings.get('warning-color')
 
 	try {
 		const allMessages = await msg.channel.messages.fetch()
