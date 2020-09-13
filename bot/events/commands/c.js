@@ -26,7 +26,7 @@ const cb = async (args, _, msg) => {
 			limit: amountToDelete < 100 ? amountToDelete + 1 : 100,
 		})
 
-		const messagesDeleted = await msg.channel.bulkDelete(messagesToDelete)
+		const messagesDeleted = await msg.channel.bulkDelete(messagesToDelete, true)
 
 		if (amountToDelete > 100) {
 			const warningMessage = await msg.channel.send(

@@ -33,7 +33,7 @@ const cb = async (args, cmd, msg) => {
 					)
 			)
 
-		const messagesDeleted = await msg.channel.bulkDelete(allMessages)
+		const messagesDeleted = await msg.channel.bulkDelete(allMessages, true)
 		const sentMessage = await msg.channel.send(
 			new Discord.MessageEmbed()
 				.setColor(msgColor)
