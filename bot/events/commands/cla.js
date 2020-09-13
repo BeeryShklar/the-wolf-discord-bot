@@ -20,24 +20,32 @@ const cb = async (args, cmd, msg) => {
 	const prefix = await guildSettings.get('prefix')
 	const msgColor = await guildSettings.get('msg-color')
 
-	const allMessages = await await msg.channel.messages.fetch()
-	if (allMessages.length > 100 && args[0] !== 'f')
-		msg.channel.send(
+	try {
+		const allMessages = await msg.channel.messages.fetch()
+		if (allMessages.length > 100 && args[0] !== 'f')
+			msg.channel.send(
+				new Discord.MessageEmbed()
+					.setColor(msgColor)
+					.setTitle('Too many messages')
+					.setDescription(
+						`Type \`${prefix}cla\` f to force deleting all the messages.`
+					)
+			)
+
+		const messagesDeleted = await msg.channel.bulkDelete(allMessages)
+		const sentMessage = await msg.channel.send(
 			new Discord.MessageEmbed()
 				.setColor(msgColor)
-				.setTitle('Too many messages')
-				.setDescription(
-					`Type \`${prefix}cla\` f to force deleting all the messages.`
-				)
+				.setTitle(`Deleted ${messagesDeleted.size} messages`)
 		)
-
-	const messagesDeleted = await msg.channel.bulkDelete(allMessages)
-	const sentMessage = await msg.channel.send(
-		new Discord.MessageEmbed()
-			.setColor(msgColor)
-			.setTitle(`Deleted ${messagesDeleted.size} messages`)
-	)
-	setTimeout(() => sentMessage.delete(), 2000)
+		setTimeout(() => sentMessage.delete(), 2000)
+	} catch (err) {
+		msg.channel.send(
+			new Discord.MessageEmbed()
+				.setColor(warningColor)
+				.setTitle(`An error occurred while trying to delete this messages :(`)
+		)
+	}
 }
 
 const help = () => ({
